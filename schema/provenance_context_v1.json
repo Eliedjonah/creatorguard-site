@@ -1,0 +1,134 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "sec": "https://w3id.org/security#",
+    "cg": "https://creatorguard.tech/vocab#",
+    "CreatorGuardAuthorizationCredential": "cg:CreatorGuardAuthorizationCredential",
+    "contentId": {
+      "@id": "cg:contentId",
+      "@type": "xsd:string"
+    },
+    "provenanceContinuityId": {
+      "@id": "cg:provenanceContinuityId",
+      "@type": "xsd:string"
+    },
+    "contentFingerprint": {
+      "@id": "cg:contentFingerprint",
+      "@type": "@id",
+      "@context": {
+        "sha256": {
+          "@id": "cg:sha256",
+          "@type": "xsd:string"
+        },
+        "algorithm": {
+          "@id": "cg:algorithm",
+          "@type": "xsd:string"
+        }
+      }
+    },
+    "authorizationState": {
+      "@id": "cg:authorizationState",
+      "@type": "@id",
+      "@context": {
+        "ai_training": {
+          "@id": "cg:aiTraining",
+          "@type": "@id",
+          "@context": {
+            "authorized": {
+              "@id": "cg:authorized",
+              "@type": "xsd:boolean"
+            },
+            "basis": {
+              "@id": "cg:basis",
+              "@type": "xsd:string"
+            },
+            "note": {
+              "@id": "cg:note",
+              "@type": "xsd:string"
+            }
+          }
+        },
+        "commercial_reuse": {
+          "@id": "cg:commercialReuse",
+          "@type": "@id",
+          "@context": {
+            "permitted": {
+              "@id": "cg:permitted",
+              "@type": "xsd:boolean"
+            },
+            "license_type": {
+              "@id": "cg:licenseType",
+              "@type": "xsd:string"
+            }
+          }
+        },
+        "attribution": {
+          "@id": "cg:attribution",
+          "@type": "@id",
+          "@context": {
+            "required": {
+              "@id": "cg:required",
+              "@type": "xsd:boolean"
+            },
+            "format": {
+              "@id": "cg:format",
+              "@type": "xsd:string"
+            }
+          }
+        },
+        "jurisdictional": {
+          "@id": "cg:jurisdictional",
+          "@type": "@id",
+          "@context": {
+            "jurisdiction": {
+              "@id": "cg:jurisdiction",
+              "@type": "xsd:string"
+            },
+            "frameworks": {
+              "@id": "cg:frameworks",
+              "@container": "@set",
+              "@type": "xsd:string"
+            },
+            "restricted": {
+              "@id": "cg:restricted",
+              "@type": "xsd:boolean"
+            }
+          }
+        },
+        "synthetic_media": {
+          "@id": "cg:syntheticMedia",
+          "@type": "@id",
+          "@context": {
+            "flagged": {
+              "@id": "cg:flagged",
+              "@type": "xsd:boolean"
+            },
+            "disclosure_required": {
+              "@id": "cg:disclosureRequired",
+              "@type": "xsd:boolean"
+            }
+          }
+        },
+        "derivatives": {
+          "@id": "cg:derivatives",
+          "@type": "@id",
+          "@context": {
+            "permitted": {
+              "@id": "cg:derivativesPermitted",
+              "@type": "xsd:boolean"
+            }
+          }
+        }
+      }
+    },
+    "governanceConfidenceScore": {
+      "@id": "cg:governanceConfidenceScore",
+      "@type": "xsd:decimal"
+    },
+    "policyVersion": {
+      "@id": "cg:policyVersion",
+      "@type": "xsd:string"
+    }
+  }
+}
