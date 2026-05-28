@@ -1,2 +1,2 @@
-# creatorguard-site
-Institutional access site for CreatorGuard provenance and authorization infrastructure.
+# CreatorGuard
+Identity-bound provenance and authorization infrastructure.
