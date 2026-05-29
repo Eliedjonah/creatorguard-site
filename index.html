@@ -46,47 +46,58 @@
 <section class="section" id="verification"><div class="section-inner"><div class="section-label">Verification Output</div><h2 class="section-title">Authorization State — Not Detection Probability</h2><p class="section-desc">The system produces two machine-distinguishable authorization states. Structure is identical in both outputs — only the authorization values differ.</p><div class="output-toggle"><button class="output-btn active-auth" id="btn-auth" onclick="showOutput('auth')">AI Training: Authorized</button><button class="output-btn" id="btn-unauth" onclick="showOutput('unauth')">AI Training: Not Authorized</button></div><div class="output-panel visible" id="panel-auth"><div class="output-header"><span class="output-status-auth">AI TRAINING — AUTHORIZED</span><span class="output-id">CG-AUTH-2026-0527</span></div><div class="output-row"><span class="output-key">contentFingerprint.sha256</span><span class="output-val">ad194f58883e0b81332efe8a08894c22…</span></div><div class="output-row"><span class="output-key">ai_training.authorized</span><span class="output-val pass">true</span></div><div class="output-row"><span class="output-key">commercial_reuse.permitted</span><span class="output-val pass">true</span></div><div class="output-row"><span class="output-key">governanceConfidenceScore</span><span class="output-val pass">1.0 — Policy Evaluation Complete</span></div><div class="output-note">Credential is offline-verifiable. No network call to CreatorGuard required.</div><div class="output-download"><a href="/contexts/provenance/v1.json" class="download-link" target="_blank">View Schema Endpoint</a></div></div><div class="output-panel" id="panel-unauth"><div class="output-header"><span class="output-status-unauth">AI TRAINING — NOT AUTHORIZED</span><span class="output-id">CG-UNAUTH-2026-0527</span></div><div class="output-row"><span class="output-key">ai_training.authorized</span><span class="output-val fail">false — NOT AUTHORIZED</span></div><div class="output-row"><span class="output-key">commercial_reuse.permitted</span><span class="output-val fail">false</span></div><div class="output-row"><span class="output-key">governanceConfidenceScore</span><span class="output-val pass">1.0 — Policy Evaluation Complete</span></div><div class="output-note">NOT AUTHORIZED means the creator has explicitly declared AI training use is not permitted. Downstream systems must treat this as a hard stop.</div><div class="output-download"><a href="/contexts/provenance/v1.json" class="download-link" target="_blank">View Schema Endpoint</a></div></div></div></section>
 <hr class="rule">
 <section class="section" id="architecture"><div class="section-inner"><div class="section-label">Verification Architecture</div><h2 class="section-title">Five Stages. One Verifiable Record.</h2><p class="section-desc">Credential verification is offline and cryptographic. No network call to CreatorGuard infrastructure required.</p></div></section> <section class="section" id="ip">
- <section class="section" id="ip">
+<section class="section" id="ip">
   <div class="section-inner">
     <div class="section-label">Strategic IP Portfolio</div>
-    <h2 class="section-title">Patent-Pending CreatorGuard IP Portfolio.</h2>
+    <h2 class="section-title">Patent-Pending CreatorGuard Technology Portfolio.</h2>
     <p class="section-desc">
-      CreatorGuard Technology LLC maintains a patent-pending intellectual property portfolio focused on digital provenance, authorization-state enforcement, AI training governance, and machine-readable trust infrastructure.
+      CreatorGuard Technology LLC maintains a patent-pending intellectual property portfolio focused on identity-bound provenance, AI governance, content authorization, trust infrastructure, and enterprise verification systems.
     </p>
 
     <div class="failure-grid">
       <div class="failure-card">
-        <strong>CreatorGuard™ Core Patent</strong>
-        <p>Identity-bound provenance, verified origin records, and authorization-state enforcement for digital media.</p>
+        <strong>CreatorGuard™</strong>
+        <p>Flagship identity-bound provenance and enforceable authorization-state infrastructure for digital media and AI-governed content ecosystems.</p>
       </div>
 
       <div class="failure-card">
-        <strong>AI Training Authorization Claims</strong>
-        <p>Patent-pending logic for marking, verifying, and enforcing whether content is authorized for AI training use.</p>
+        <strong>Interoperable Creative Provenance</strong>
+        <p>Trust-anchor and negative-verification signaling architecture for platform-agnostic provenance, content authorization, and downstream reliance packets.</p>
       </div>
 
       <div class="failure-card">
-        <strong>Provenance Continuity Claims</strong>
-        <p>IP coverage directed to maintaining verification signals after compression, reposting, metadata stripping, or format changes.</p>
+        <strong>AI Infrastructure Dependency Mapping</strong>
+        <p>Graph-based analysis of compute, cloud, semiconductor, financial, and platform dependencies across AI ecosystems.</p>
       </div>
 
       <div class="failure-card">
-        <strong>Enterprise Audit Output Claims</strong>
-        <p>Patent-pending infrastructure for producing machine-readable and audit-ready verification records for downstream systems.</p>
+        <strong>Voice Protection / VoicePrint Vault™</strong>
+        <p>Systems for detecting, blocking, or disrupting unauthorized AI voice recording, cloning, and synthetic voice misuse.</p>
       </div>
 
       <div class="failure-card">
-        <strong>Platform Enforcement Layer</strong>
-        <p>IP directed toward platform, licensing, advertiser, and AI-provider use of authorization-state outputs.</p>
+        <strong>Deepfake Detection Overlay</strong>
+        <p>Screen-layer verification interface for real-time deepfake and synthetic-media risk signaling across consumer and enterprise devices.</p>
       </div>
 
       <div class="failure-card">
-        <strong>Strategic Continuation Rights</strong>
-        <p>Future continuation pathways may extend into licensing automation, AI governance registries, trust anchors, and compliance signaling.</p>
+        <strong>Governance & Enforcement Layer</strong>
+        <p>Machine-readable outputs for licensing validation, AI training authorization, advertiser review, audit workflows, and platform enforcement.</p>
+      </div>
+
+      <div class="failure-card">
+        <strong>Private Context Cloak™</strong>
+        <p>Privacy infrastructure for masking, filtering, and restricting unauthorized inference of user activity by AI systems and online services.</p>
+      </div>
+
+      <div class="failure-card">
+        <strong>NDA-Gated Portfolio Review</strong>
+        <p>Detailed claim charts, provisional summaries, technical diagrams, and licensing materials are available only to qualified institutional parties under NDA.</p>
       </div>
     </div>
   </div>
 </section>
+
  
 
 <section class="access-section" id="access"><div class="access-inner"><div><div class="section-label">Institutional Access</div><h2 class="section-title">Request Access Under NDA</h2><p style="font-size:14px;color:var(--text-mid);line-height:1.7;margin-bottom:32px;max-width:420px;">Licensing discussions, acquisition review, and technical documentation access are available to qualified institutional parties under NDA.</p><form class="access-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST"><div class="form-row"><div><label class="form-label">Full Name *</label><input class="form-input" type="text" name="name" required></div><div><label class="form-label">Title / Role *</label><input class="form-input" type="text" name="title" required></div></div><div><label class="form-label">Institutional Email *</label><input class="form-input" type="email" name="email" required></div><div><label class="form-label">Organization *</label><input class="form-input" type="text" name="organization" required></div><div><label class="form-label">Area of Interest *</label><select class="form-select" name="interest" required><option value="">Select</option><option>AI Training Authorization / Governance</option><option>Platform Licensing</option><option>Enterprise Verification</option><option>IP Acquisition / Partnership</option><option>Legal / Audit Infrastructure</option></select></div><div><label class="form-label">Governance Problem Statement</label><textarea class="form-textarea" name="problem" rows="3"></textarea></div><button type="submit" class="form-submit">Submit Access Request</button><p class="form-note">Submission represents a genuine institutional evaluation request. Technical materials provided upon qualification.</p></form></div><div class="access-info"><div class="info-label">Institutional Registration</div><div style="border:1px solid var(--bg-border);overflow:hidden;"><div class="cred-field"><span class="cred-key">SAM.gov UEI</span><span class="cred-val">QPGEMXLRHSK5</span></div><div class="cred-field"><span class="cred-key">DUNS</span><span class="cred-val">14-464-9875</span></div><div class="cred-field"><span class="cred-key">USPTO Docket</span><span class="cred-val">85498</span></div><div class="cred-field"><span class="cred-key">Schema Endpoint</span><span class="cred-val" style="color:var(--blue);">creatorguard.tech/contexts/provenance/v1.json</span></div></div><div class="info-label">Scope of Verification</div><p class="info-body">CreatorGuard verifies declared authorization state and cryptographic continuity. It does not adjudicate copyright ownership or constitute a legal opinion on creator rights.</p></div></div></section>
