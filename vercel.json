@@ -1,2 +1,25 @@
-{}
- 
+
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/contexts/provenance/v1.json",
+      "headers": {
+        "Content-Type": "application/ld+json",
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "public, max-age=86400"
+      },
+      "dest": "/contexts/provenance/v1.json"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
