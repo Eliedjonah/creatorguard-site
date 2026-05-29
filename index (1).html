@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CreatorGuard™ | Provenance & Authorization Infrastructure</title>
+  <meta name="description" content="Identity-bound provenance and authorization infrastructure for AI and digital media ecosystems. USPTO Docket 85498. Patent Pending." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ─────────────────────────────────────── */
+    :root {
+      --bg:        #0a0c10;
+      --bg-raised: #0f1219;
+      --bg-border: #1a1f2e;
+      --blue:      #1a6fff;
+      --blue-dim:  #0f3d99;
+      --red:       #cc2222;
+      --green:     #1a8c3a;
+      --green-text:#22cc55;
+      --red-text:  #ff4444;
+      --text:      #e4e6ed;
+      --text-mid:  #8890a6;
+      --text-dim:  #4a5268;
+      --mono:      'IBM Plex Mono', monospace;
+      --sans:      'IBM Plex Sans', sans-serif;
+      --max:       1020px;
+      --pad:       clamp(20px, 5vw, 56px);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background:  var(--bg);
+      color:       var(--text);
+      font-family: var(--sans);
+      font-size:   15px;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ─────────────────────────────────────────── */
+    nav {
+      position:        sticky;
+      top:             0;
+      z-index:         100;
+      background:      rgba(10,12,16,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom:   1px solid var(--bg-border);
+      padding:         0 var(--pad);
+    }
+    .nav-inner {
+      max-width:       var(--max);
+      margin:          0 auto;
+      display:         flex;
+      justify-content: space-between;
+      align-items:     center;
+      height:          56px;
+    }
+    .nav-brand {
+      font-family:    var(--mono);
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.18em;
+      color:          var(--blue);
+    }
+    .nav-links {
+      display:    flex;
+      gap:        24px;
+      align-items:center;
+    }
+    .nav-links a {
+      font-family:    var(--mono);
+      font-size:      10px;
+      letter-spacing: 0.08em;
+      color:          var(--text-mid);
+      transition:     color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-patent {
+      font-family:    var(--mono);
+      font-size:      9px;
+      letter-spacing: 0.12em;
+      color:          var(--text-dim);
+      border:         1px solid var(--bg-border);
+      padding:        3px 8px;
+    }
+
+    /* ── Layout helpers ──────────────────────────────── */
+    .container {
+      max-width: var(--max);
+      margin:    0 auto;
+      padding:   0 var(--pad);
+    }
+    .rule {
+      border:     none;
+      border-top: 1px solid var(--bg-border);
+      margin:     0;
+    }
+    .section {
+      padding: 72px var(--pad);
+    }
+    .section-inner {
+      max-width: var(--max);
+      margin:    0 auto;
+    }
+    .section-label {
+      font-family:    var(--mono);
+      font-size:      9px;
+      font-weight:    600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color:          var(--blue);
+      margin-bottom:  16px;
+    }
+    .section-title {
+      font-family:   var(--sans);
+      font-size:     clamp(22px, 3.5vw, 34px);
+      font-weight:   300;
+      letter-spacing:-0.02em;
+      color:         var(--text);
+      margin-bottom: 12px;
+      line-height:   1.2;
+    }
+    .section-desc {
+      font-size:     14px;
+      color:         var(--text-mid);
+      max-width:     560px;
+      line-height:   1.7;
+      margin-bottom: 40px;
+    }
+
+    /* ── Hero ────────────────────────────────────────── */
+    .hero {
+      padding:    96px var(--pad) 72px;
+      border-bottom: 1px solid var(--bg-border);
+    }
+    .hero-inner { max-width: var(--max); margin: 0 auto; }
+    .hero-tag {
+      font-family:    var(--mono);
+      font-size:      9px;
+      font-weight:    600;
+      letter-spacing: 0.2em;
+      color:          var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom:  20px;
+      display:        flex;
+      gap:            12px;
+      align-items:    center;
+    }
+    .hero-tag span { color: var(--bg-border); }
+    .hero h1 {
+      font-family:   var(--sans);
+      font-size:     clamp(28px, 5vw, 52px);
+      font-weight:   300;
+      line-height:   1.1;
+      letter-spacing:-0.025em;
+      color:         var(--text);
+      max-width:     720px;
+      margin-bottom: 20px;
+    }
+    .hero h1 strong {
+      font-weight: 600;
+      color:       var(--text);
+    }
+    .hero-sub {
+      font-size:     15px;
+      color:         var(--text-mid);
+      max-width:     580px;
+      line-height:   1.7;
+      margin-bottom: 36px;
+    }
+    .hero-actions {
+      display:   flex;
+      gap:       12px;
+      flex-wrap: wrap;
+      margin-bottom: 52px;
+    }
+    .btn-primary {
+      font-family:    var(--mono);
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.08em;
+      color:          var(--bg);
+      background:     var(--blue);
+      padding:        11px 22px;
+      display:        inline-block;
+      transition:     background 0.15s;
+      cursor:         pointer;
+      border:         none;
+    }
+    .btn-primary:hover { background: #1258d6; }
+    .btn-secondary {
+      font-family:    var(--mono);
+      font-size:      11px;
+      letter-spacing: 0.08em;
+      color:          var(--text-mid);
+      border:         1px solid var(--bg-border);
+      padding:        11px 22px;
+      display:        inline-block;
+      transition:     border-color 0.15s, color 0.15s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--text-dim);
+      color:        var(--text);
+    }
+
+    /* Credential strip */
+    .cred-strip {
+      border:        1px solid var(--bg-border);
+      overflow:      hidden;
+      max-width:     760px;
+    }
+    .cred-strip-label {
+      font-family:    var(--mono);
+      font-size:      9px;
+      font-weight:    600;
+      letter-spacing: 0.14em;
+      color:          var(--text-dim);
+      background:     var(--bg-raised);
+      padding:        8px 14px;
+      border-bottom:  1px solid var(--bg-border);
+      text-transform: uppercase;
+    }
+    .cred-field {
+      display:       grid;
+      grid-template-columns: 260px 1fr;
+      gap:           16px;
+      padding:       7px 14px;
+      border-bottom: 1px solid var(--bg-border);
+    }
+    .cred-field:last-child { border-bottom: none; }
+    .cred-field:nth-child(even) { background: var(--bg-raised); }
+    .cred-key {
+      font-family: var(--mono);
+      font-size:   11px;
+      color:       var(--text-dim);
+    }
+    .cred-val {
+      font-family: var(--mono);
+      font-size:   11px;
+      color:       var(--text-mid);
+    }
+    .cred-val.denied  { color: var(--red-text);   font-weight: 500; }
+    .cred-val.granted { color: var(--green-text);  font-weight: 500; }
+
+    /* ── Failure modes ───────────────────────────────── */
+    .failure-grid {
+      display:               grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap:                   1px;
+      background:            var(--bg-border);
+      border:                1px solid var(--bg-border);
+    }
+    .failure-card {
+      background: var(--bg);
+      padding:    28px;
+      display:    flex;
+      flex-direction: column;
+      gap:        10px;
+    }
+    .failure-card:hover { background: var(--bg-raised); }
+    .failure-n {
+      font-family:    var(--mono);
+      font-size:      10px;
+      color:          var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+    .failure-title {
+      font-size:   14px;
+      font-weight: 600;
+      color:       var(--text);
+    }
+    .failure-desc {
+      font-size:   13px;
+      color:       var(--text-mid);
+      line-height: 1.65;
+    }
+
+    /* ── Verification output ─────────────────────────── */
+    .output-toggle {
+      display:   flex;
+      gap:       0;
+      margin-bottom: 24px;
+      border:    1px solid var(--bg-border);
+      width:     fit-content;
+    }
+    .output-btn {
+      font-family:    var(--mono);
+      font-size:      10px;
+      font-weight:    500;
+      letter-spacing: 0.1em;
+      padding:        10px 20px;
+      background:     var(--bg-raised);
+      color:          var(--text-dim);
+      border:         none;
+      cursor:         pointer;
+      transition:     all 0.15s;
+      text-transform: uppercase;
+    }
+    .output-btn.active-auth {
+      background: #0a1f0a;
+      color:      var(--green-text);
+    }
+    .output-btn.active-unauth {
+      background: #1a0808;
+      color:      var(--red-text);
+    }
+    .output-panel {
+      border:  1px solid var(--bg-border);
+      overflow:hidden;
+      display: none;
+      max-width: 720px;
+    }
+    .output-panel.visible { display: block; }
+    .output-header {
+      display:        flex;
+      justify-content:space-between;
+      align-items:    center;
+      padding:        12px 16px;
+      border-bottom:  1px solid var(--bg-border);
+    }
+    .output-status-auth {
+      font-family:    var(--mono);
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.1em;
+      color:          var(--green-text);
+      background:     rgba(26,140,58,0.15);
+      border:         1px solid var(--green);
+      padding:        4px 10px;
+    }
+    .output-status-unauth {
+      font-family:    var(--mono);
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.1em;
+      color:          var(--red-text);
+      background:     rgba(204,34,34,0.15);
+      border:         1px solid var(--red);
+      padding:        4px 10px;
+    }
+    .output-id {
+      font-family: var(--mono);
+      font-size:   10px;
+      color:       var(--text-dim);
+    }
+    .output-row {
+      display:       grid;
+      grid-template-columns: 220px 1fr;
+      gap:           16px;
+      padding:       8px 16px;
+      border-bottom: 1px solid var(--bg-border);
+      font-size:     12px;
+    }
+    .output-row:last-child { border-bottom: none; }
+    .output-row:nth-child(even) { background: var(--bg-raised); }
+    .output-key {
+      font-family: var(--mono);
+      font-size:   11px;
+      color:       var(--text-dim);
+    }
+    .output-val {
+      font-family: var(--mono);
+      font-size:   11px;
+      color:       var(--text-mid);
+    }
+    .output-val.pass { color: var(--green-text); }
+    .output-val.fail { color: var(--red-text); }
+    .output-note {
+      padding:     12px 16px;
+      background:  var(--bg-raised);
+      border-top:  1px solid var(--bg-border);
+      font-size:   12px;
+      color:       var(--text-dim);
+      font-family: var(--mono);
+      line-height: 1.6;
+    }
+    .output-download {
+      padding:     12px 16px;
+      border-top:  1px solid var(--bg-border);
+      display:     flex;
+      gap:         12px;
+      align-items: center;
+    }
+    .download-link {
+      font-family:    var(--mono);
+      font-size:      10px;
+      color:          var(--blue);
+      letter-spacing: 0.05em;
+    }
+    .download-link:hover { text-decoration: underline; }
+
+    /* ── Dimensions table ────────────────────────────── */
+    .dim-table {
+      border:   1px solid var(--bg-border);
+      overflow: hidden;
+    }
+    .dim-header {
+      display:               grid;
+      grid-template-columns: 200px 240px 1fr;
+      gap:                   16px;
+      padding:               10px 16px;
+      background:            var(--bg-raised);
+      border-bottom:         1px solid var(--bg-border);
+      font-family:           var(--mono);
+      font-size:             9px;
+      font-weight:           600;
+      letter-spacing:        0.12em;
+      text-transform:        uppercase;
+      color:                 var(--text-dim);
+    }
+    .dim-row {
+      display:               grid;
+      grid-template-columns: 200px 240px 1fr;
+      gap:                   16px;
+      padding:               14px 16px;
+      border-bottom:         1px solid var(--bg-border);
+      align-items:           start;
+    }
+    .dim-row:last-child         { border-bottom: none; }
+    .dim-row:nth-child(even)    { background: var(--bg-raised); }
+    .dim-name {
+      font-size:   13px;
+      font-weight: 500;
+      color:       var(--text);
+    }
+    .dim-field {
+      font-family: var(--mono);
+      font-size:   10px;
+      color:       var(--blue);
+      word-break:  break-all;
+    }
+    .dim-desc {
+      font-size:   12px;
+      color:       var(--text-mid);
+      line-height: 1.6;
+    }
+    @media (max-width:680px) {
+      .dim-header { display: none; }
+      .dim-row    { grid-template-columns: 1fr; gap: 6px; }
+    }
+
+    /* ── Architecture steps ──────────────────────────── */
+    .arch-steps {
+      border:   1px solid var(--bg-border);
+      overflow: hidden;
+    }
+    .arch-step {
+      display:       flex;
+      gap:           24px;
+      padding:       20px;
+      border-bottom: 1px solid var(--bg-border);
+      align-items:   start;
+    }
+    .arch-step:last-child       { border-bottom: none; }
+    .arch-step:nth-child(even)  { background: var(--bg-raised); }
+    .arch-n {
+      font-family:    var(--mono);
+      font-size:      10px;
+      color:          var(--text-dim);
+      letter-spacing: 0.1em;
+      min-width:      28px;
+      padding-top:    2px;
+    }
+    .arch-title {
+      display:       block;
+      font-size:     13px;
+      font-weight:   600;
+      color:         var(--text);
+      margin-bottom: 4px;
+    }
+    .arch-desc {
+      font-size:   13px;
+      color:       var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* ── Comparison table ────────────────────────────── */
+    .comp-table {
+      width:        100%;
+      border:       1px solid var(--bg-border);
+      border-collapse: collapse;
+      font-size:    12px;
+    }
+    .comp-table th {
+      font-family:    var(--mono);
+      font-size:      9px;
+      font-weight:    600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color:          var(--text-dim);
+      background:     var(--bg-raised);
+      padding:        10px 14px;
+      text-align:     left;
+      border-bottom:  1px solid var(--bg-border);
+      border-right:   1px solid var(--bg-border);
+    }
+    .comp-table th:last-child { border-right: none; }
+    .comp-table th.highlight  { color: var(--blue); background: #0a1020; }
+    .comp-table td {
+      padding:      10px 14px;
+      border-bottom:1px solid var(--bg-border);
+      border-right: 1px solid var(--bg-border);
+      color:        var(--text-mid);
+      vertical-align: middle;
+    }
+    .comp-table td:last-child  { border-right: none; }
+    .comp-table tr:last-child td { border-bottom: none; }
+    .comp-table tr:nth-child(even) td { background: var(--bg-raised); }
+    .comp-table td.highlight   { background: #080f1a; }
+    .cell-yes { color: var(--green-text); font-weight: 600; font-family: var(--mono); font-size:11px; }
+    .cell-no  { color: var(--red-text);   font-family: var(--mono); font-size:11px; }
+    .cell-partial { color: #cc9900; font-family: var(--mono); font-size:11px; }
+
+    /* ── IP portfolio ────────────────────────────────── */
+    .ip-table {
+      width:           100%;
+      border:          1px solid var(--bg-border);
+      border-collapse: collapse;
+      font-size:       12px;
+    }
+    .ip-table th {
+      font-family:    var(--mono);
+      font-size:      9px;
+      font-weight:    600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color:          var(--text-dim);
+      background:     var(--bg-raised);
+      padding:        10px 14px;
+      text-align:     left;
+      border-bottom:  1px solid var(--bg-border);
+      border-right:   1px solid var(--bg-border);
+    }
+    .ip-table th:last-child { border-right: none; }
+    .ip-table td {
+      padding:       12px 14px;
+      border-bottom: 1px solid var(--bg-border);
+      border-right:  1px solid var(--bg-border);
+      color:         var(--text-mid);
+      vertical-align:top;
+    }
+    .ip-table td:last-child   { border-right: none; }
+    .ip-table tr:last-child td{ border-bottom: none; }
+    .ip-table tr:nth-child(even) td { background: var(--bg-raised); }
+    .ip-name {
+      font-size:   13px;
+      font-weight: 600;
+      color:       var(--text);
+      display:     block;
+      margin-bottom:3px;
+    }
+    .ip-layer {
+      font-family:    var(--mono);
+      font-size:      9px;
+      letter-spacing: 0.1em;
+      color:          var(--blue);
+      text-transform: uppercase;
+    }
+
+    /* ── Access section ──────────────────────────────── */
+    .access-section {
+      background: var(--bg-raised);
+      border-top: 1px solid var(--bg-border);
+      border-bottom: 1px solid var(--bg-border);
+    }
+    .access-inner {
+      max-width:  var(--max);
+      margin:     0 auto;
+      padding:    72px var(--pad);
+      display:    grid;
+      grid-template-columns: 1fr 400px;
+      gap:        60px;
+      align-items:start;
+    }
+    @media (max-width:760px) {
+      .access-inner { grid-template-columns: 1fr; }
+    }
+    .access-form {
+      display:        flex;
+      flex-direction: column;
+      gap:            14px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width:500px) { .form-row { grid-template-columns: 1fr; } }
+    .form-field { display: flex; flex-direction: column; gap: 5px; }
+    .form-label {
+      font-family:    var(--mono);
+      font-size:      9px;
+      font-weight:    600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color:          var(--text-dim);
+    }
+    .form-input, .form-select, .form-textarea {
+      background:   #080a0f;
+      border:       1px solid var(--bg-border);
+      color:        var(--text);
+      font-family:  var(--sans);
+      font-size:    14px;
+      padding:      10px 12px;
+      outline:      none;
+      transition:   border-color 0.15s;
+      width:        100%;
+    }
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus { border-color: var(--blue); }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--text-dim); }
+    .form-select { cursor: pointer; }
+    .form-select option { background: var(--bg-raised); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-submit {
+      font-family:    var(--mono);
+      font-size:      11px;
+      font-weight:    600;
+      letter-spacing: 0.1em;
+      color:          var(--bg);
+      background:     var(--blue);
+      border:         none;
+      padding:        12px 24px;
+      cursor:         pointer;
+      align-self:     flex-start;
+      transition:     background 0.15s;
+    }
+    .form-submit:hover { background: #1258d6; }
+    .form-note {
+      font-family: var(--mono);
+      font-size:   9px;
+      color:       var(--text-dim);
+      line-height: 1.7;
+    }
+    .access-info { display: flex; flex-direction: column; gap: 28px; }
+    .info-block  { display: flex; flex-direction: column; gap: 8px; }
+    .info-label  {
+      font-family:    var(--mono);
+      font-size:      9px;
+      font-weight:    600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color:          var(--text-dim);
+    }
+    .info-body {
+      font-size:   13px;
+      color:       var(--text-mid);
+      line-height: 1.65;
+    }
+    .info-divider { border: none; border-top: 1px solid var(--bg-border); }
+
+    /* ── Footer ──────────────────────────────────────── */
+    footer {
+      padding:    32px var(--pad);
+      border-top: 1px solid var(--bg-border);
+    }
+    .footer-inner {
+      max-width:       var(--max);
+      margin:          0 auto;
+      display:         flex;
+      justify-content: space-between;
+      align-items:     center;
+      flex-wrap:       wrap;
+      gap:             12px;
+    }
+    .footer-left {
+      display:        flex;
+      flex-direction: column;
+      gap:            4px;
+    }
+    .footer-brand {
+      font-family:    var(--mono);
+      font-size:      10px;
+      font-weight:    600;
+      letter-spacing: 0.16em;
+      color:          var(--blue);
+    }
+    .footer-meta {
+      font-family: var(--mono);
+      font-size:   9px;
+      color:       var(--text-dim);
+    }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a {
+      font-family: var(--mono);
+      font-size:   10px;
+      color:       var(--text-dim);
+      transition:  color 0.15s;
+    }
+    .footer-links a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ──────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand">CREATORGAURD</span>
+    <div class="nav-links">
+      <a href="#verification">Verification</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#ip">IP Portfolio</a>
+      <a href="/ip-portfolio.html">Full Portfolio</a>
+      <span class="nav-patent">USPTO · 85498</span>
+      <a href="#access" class="btn-primary" style="font-size:10px;padding:7px 14px;">Request Access</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">
+      AUTHORIZATION INFRASTRUCTURE
+      <span>·</span>
+      CGP-1.0
+      <span>·</span>
+      PATENT PENDING
+    </div>
+    <h1>
+      Identity-bound provenance.<br />
+      <strong>Enforceable authorization state.</strong>
+    </h1>
+    <p class="hero-sub">
+      CreatorGuard establishes cryptographically-verifiable authorization
+      at content origin. The output is a machine-ingestible W3C Verifiable
+      Credential — not a detection score, not a watermark. A governance
+      artifact that downstream systems act on.
+    </p>
+    <div class="hero-actions">
+      <a href="#verification" class="btn-primary">Review Verification Output</a>
+      <a href="#access" class="btn-secondary">Request Access Under NDA</a>
+    </div>
+
+    <!-- Live credential strip -->
+    <div class="cred-strip">
+      <div class="cred-strip-label">Authorization State — Live Credential Output · cgp-1.0</div>
+      <div class="cred-field">
+        <span class="cred-key">type</span>
+        <span class="cred-val">CreatorGuardAuthorizationCredential</span>
+      </div>
+      <div class="cred-field">
+        <span class="cred-key">ai_training.authorized</span>
+        <span class="cred-val denied">false — NOT AUTHORIZED</span>
+      </div>
+      <div class="cred-field">
+        <span class="cred-key">provenanceContinuityId</span>
+        <span class="cred-val">urn:creatorguard:credential:6578b4d8-3b3d…</span>
+      </div>
+      <div class="cred-field">
+        <span class="cred-key">proof.type</span>
+        <span class="cred-val">Ed25519Signature2020</span>
+      </div>
+      <div class="cred-field">
+        <span class="cred-key">governanceConfidenceScore</span>
+        <span class="cred-val granted">1.0 — All dimensions resolved</span>
+      </div>
+      <div class="cred-field">
+        <span class="cred-key">policyVersion</span>
+        <span class="cred-val">cgp-1.0</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule" />
+
+<!-- ── Authorization Failures ──────────────────────── -->
+<section class="section" id="failures">
+  <div class="section-inner">
+    <div class="section-label">Authorization Infrastructure Failures</div>
+    <h2 class="section-title">The Conditions CreatorGuard Addresses</h2>
+    <p class="section-desc">
+      These are operational failures occurring now, at scale, across AI training
+      pipelines and content distribution infrastructure.
+    </p>
+    <div class="failure-grid">
+      <div class="failure-card">
+        <span class="failure-n">01</span>
+        <span class="failure-title">Authorization Ambiguity</span>
+        <p class="failure-desc">AI pipelines ingesting content with no machine-readable training authorization signal. Liability exposure accumulates silently with every ingestion event.</p>
+      </div>
+      <div class="failure-card">
+        <span class="failure-n">02</span>
+        <span class="failure-title">Provenance Discontinuity</span>
+        <p class="failure-desc">Content traverses transformation, compression, and redistribution without carrying its origin state. Chain of custody breaks. Rights claims become unprovable.</p>
+      </div>
+      <div class="failure-card">
+        <span class="failure-n">03</span>
+        <span class="failure-title">Governance Fragmentation</span>
+        <p class="failure-desc">Rights declarations exist in disconnected silos — contracts, platform metadata, verbal agreements. None are machine-ingestible. None survive audit scrutiny.</p>
+      </div>
+      <div class="failure-card">
+        <span class="failure-n">04</span>
+        <span class="failure-title">Audit Trail Absence</span>
+        <p class="failure-desc">No verifiable record of authorization state at time of ingestion. Disputes cannot be resolved with evidence. Enforcement workflows have no standing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule" />
+
+<!-- ── Verification Output ─────────────────────────── -->
+<section class="section" id="verification">
+  <div class="section-inner">
+    <div class="section-label">Verification Output</div>
+    <h2 class="section-title">Authorization State — Not Detection Probability</h2>
+    <p class="section-desc">
+      The system produces two machine-distinguishable authorization states.
+      Structure is identical in both outputs — only the authorization values differ.
+      Downstream systems consume the credential directly.
+    </p>
+
+    <div class="output-toggle">
+      <button class="output-btn active-auth" id="btn-auth" onclick="showOutput('auth')">
+        AI Training: Authorized
+      </button>
+      <button class="output-btn" id="btn-unauth" onclick="showOutput('unauth')">
+        AI Training: Not Authorized
+      </button>
+    </div>
+
+    <!-- AUTHORIZED output -->
+    <div class="output-panel visible" id="panel-auth">
+      <div class="output-header">
+        <span class="output-status-auth">AI TRAINING — AUTHORIZED</span>
+        <span class="output-id">CG-AUTH-2026-0527</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">contentFingerprint.sha256</span>
+        <span class="output-val">ad194f58883e0b81332efe8a08894c22…</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">ai_training.authorized</span>
+        <span class="output-val pass">true</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">ai_training.basis</span>
+        <span class="output-val">creator_declaration</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">commercial_reuse.permitted</span>
+        <span class="output-val pass">true</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">attribution.required</span>
+        <span class="output-val">true — standard-credit</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">jurisdictional.frameworks</span>
+        <span class="output-val">DMCA, Copyright Act 17 USC</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">synthetic_media.flagged</span>
+        <span class="output-val pass">false</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">governanceConfidenceScore</span>
+        <span class="output-val pass">1.0 — Policy Evaluation Complete</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">proof.type</span>
+        <span class="output-val">Ed25519Signature2020</span>
+      </div>
+      <div class="output-note">
+        Credential is offline-verifiable. No network call to CreatorGuard required.
+        Verify by recomputing SHA-256 of content bytes and checking Ed25519 signature
+        against the embedded public key.
+      </div>
+      <div class="output-download">
+        <a href="/audit-report.pdf" class="download-link" download>Download Audit Report PDF</a>
+        <span style="color:var(--text-dim);font-family:var(--mono);font-size:10px;">·</span>
+        <a href="/contexts/provenance/v1.json" class="download-link" target="_blank">View Schema Endpoint</a>
+      </div>
+    </div>
+
+    <!-- NOT AUTHORIZED output -->
+    <div class="output-panel" id="panel-unauth">
+      <div class="output-header">
+        <span class="output-status-unauth">AI TRAINING — NOT AUTHORIZED</span>
+        <span class="output-id">CG-UNAUTH-2026-0527</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">contentFingerprint.sha256</span>
+        <span class="output-val">bf4e29cc1a7d3f90211bd8c74a22e17f…</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">ai_training.authorized</span>
+        <span class="output-val fail">false — NOT AUTHORIZED</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">ai_training.basis</span>
+        <span class="output-val">creator_declaration</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">commercial_reuse.permitted</span>
+        <span class="output-val fail">false</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">attribution.required</span>
+        <span class="output-val">true — standard-credit</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">jurisdictional.frameworks</span>
+        <span class="output-val">DMCA, Copyright Act 17 USC</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">synthetic_media.flagged</span>
+        <span class="output-val fail">false</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">governanceConfidenceScore</span>
+        <span class="output-val pass">1.0 — Policy Evaluation Complete</span>
+      </div>
+      <div class="output-row">
+        <span class="output-key">proof.type</span>
+        <span class="output-val">Ed25519Signature2020</span>
+      </div>
+      <div class="output-note">
+        NOT AUTHORIZED does not mean the content is freely usable. It means the
+        creator has explicitly declared AI training use is not permitted. Downstream
+        systems must treat this as a hard stop. Absence of a credential carries
+        the same weight as NOT AUTHORIZED.
+      </div>
+      <div class="output-download">
+        <a href="/audit-report.pdf" class="download-link" download>Download Audit Report PDF</a>
+        <span style="color:var(--text-dim);font-family:var(--mono);font-size:10px;">·</span>
+        <a href="/contexts/provenance/v1.json" class="download-link" target="_blank">View Schema Endpoint</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule" />
+
+<!-- ── Credential Dimensions ───────────────────────── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">Credential Authorization Dimensions</div>
+    <h2 class="section-title">Six Governance Dimensions. Every Credential.</h2>
+    <p class="section-desc">
+      Each credential resolves six dimensions at issuance. Every dimension is
+      machine-readable, schema-validated, and cryptographically bound to the
+      content fingerprint and creator DID.
+    </p>
+    <div class="dim-table">
+      <div class="dim-header">
+        <span>Dimension</span>
+        <span>Field Path</span>
+        <span>Governance Function</span>
+      </div>
+      <div class="dim-row">
+        <span class="dim-name">AI Training Authorization</span>
+        <code class="dim-field">authorizationState.ai_training.authorized</code>
+        <p class="dim-desc">Primary ingestion gate. Boolean. Hard stop or explicit authorization for AI training pipelines.</p>
+      </div>
+      <div class="dim-row">
+        <span class="dim-name">Provenance Continuity</span>
+        <code class="dim-field">provenanceContinuityId</code>
+        <p class="dim-desc">Immutable audit reference binding each verification event to a content fingerprint and creator DID.</p>
+      </div>
+      <div class="dim-row">
+        <span class="dim-name">Commercial Reuse</span>
+        <code class="dim-field">authorizationState.commercial_reuse</code>
+        <p class="dim-desc">License type and revenue-share obligations resolved at verification time, not inferred downstream.</p>
+      </div>
+      <div class="dim-row">
+        <span class="dim-name">Jurisdictional Framework</span>
+        <code class="dim-field">authorizationState.jurisdictional.frameworks</code>
+        <p class="dim-desc">Applicable legal frameworks derived from declared jurisdiction. Machine-readable for compliance gates.</p>
+      </div>
+      <div class="dim-row">
+        <span class="dim-name">Synthetic Media State</span>
+        <code class="dim-field">authorizationState.synthetic_media.flagged</code>
+        <p class="dim-desc">Disclosure obligation for AI-generated or significantly altered content.</p>
+      </div>
+      <div class="dim-row">
+        <span class="dim-name">Policy Evaluation Completeness</span>
+        <code class="dim-field">governanceConfidenceScore</code>
+        <p class="dim-desc">Fraction of governance dimensions fully resolved. 1.0 = all six dimensions declared. Not a detection probability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule" />
+
+<!-- ── Architecture ────────────────────────────────── -->
+<section class="section" id="architecture">
+  <div class="section-inner">
+    <div class="section-label">Verification Architecture</div>
+    <h2 class="section-title">Five Stages. One Verifiable Record.</h2>
+    <p class="section-desc">
+      Credential verification is offline and cryptographic. No network call to
+      CreatorGuard infrastructure required.
+    </p>
+    <div class="arch-steps">
+      <div class="arch-step">
+        <span class="arch-n">01</span>
+        <div>
+          <span class="arch-title">Multi-Modal Identity Anchor</span>
+          <p class="arch-desc">Biometric binding at point of creation. Facial geometry, voice spectral analysis, behavioral fingerprinting. Creator identity locked to content origin via W3C DID.</p>
+        </div>
+      </div>
+      <div class="arch-step">
+        <span class="arch-n">02</span>
+        <div>
+          <span class="arch-title">Cryptographic Fingerprinting</span>
+          <p class="arch-desc">SHA-256 fingerprint computed from raw content bytes. Format-agnostic — image, video, audio, document. If any byte changes, the fingerprint changes and the credential no longer matches.</p>
+        </div>
+      </div>
+      <div class="arch-step">
+        <span class="arch-n">03</span>
+        <div>
+          <span class="arch-title">Governance Policy Evaluation</span>
+          <p class="arch-desc">Six dimensions evaluated against creator declarations. Each resolves to a machine-readable state. Policy version cgp-1.0 governs evaluation logic.</p>
+        </div>
+      </div>
+      <div class="arch-step">
+        <span class="arch-n">04</span>
+        <div>
+          <span class="arch-title">W3C Verifiable Credential Issuance</span>
+          <p class="arch-desc">JSON-LD credential generated. Ed25519-signed. Schema resolves at <code style="font-size:11px;color:var(--blue)">creatorguard.tech/contexts/provenance/v1.json</code>. Any standards-compliant system can ingest it without custom integration.</p>
+        </div>
+      </div>
+      <div class="arch-step">
+        <span class="arch-n">05</span>
+        <div>
+          <span class="arch-title">Offline Verification</span>
+          <p class="arch-desc">Any party recomputes the content fingerprint, checks it against the credential, and verifies the Ed25519 signature against the embedded public key. No dependency on CreatorGuard availability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule" />
+
+<!-- ── Comparison ──────────────────────────────────── -->
+<section class="section" id="comparison">
+  <div class="section-inner">
+    <div class="section-label">Capability Comparison</div>
+    <h2 class="section-title">Verification Infrastructure vs. Existing Approaches</h2>
+    <p class="section-desc">
+      CreatorGuard is positioned as authorization infrastructure —
+      not probability-based detection.
+    </p>
+    <div style="overflow-x:auto;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>AI Detectors</th>
+            <th>Watermarks</th>
+            <th>C2PA Standard</th>
+            <th class="highlight">CreatorGuard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Identity Anchoring</td>
+            <td class="cell-no">None</td>
+            <td class="cell-no">None</td>
+            <td class="cell-partial">Voluntary</td>
+            <td class="highlight cell-yes">Locked</td>
+          </tr>
+          <tr>
+            <td>Survives Manipulation</td>
+            <td class="cell-no">Low</td>
+            <td class="cell-no">Low</td>
+            <td class="cell-partial">Medium</td>
+            <td class="highlight cell-yes">High</td>
+          </tr>
+          <tr>
+            <td>Platform Enforcement Ready</td>
+            <td class="cell-no">No</td>
+            <td class="cell-no">No</td>
+            <td class="cell-partial">Limited</td>
+            <td class="highlight cell-yes">Yes</td>
+          </tr>
+          <tr>
+            <td>Legal / Audit Ready</td>
+            <td class="cell-no">No</td>
+            <td class="cell-no">No</td>
+            <td class="cell-partial">Partial</td>
+            <td class="highlight cell-yes">Yes</td>
+          </tr>
+          <tr>
+            <td>AI Training Authorization</td>
+            <td class="cell-no">No</td>
+            <td class="cell-no">No</td>
+            <td class="cell-partial">Not Primary</td>
+            <td class="highlight cell-yes">Primary Signal</td>
+          </tr>
+          <tr>
+            <td>Machine-Ingestible Output</td>
+            <td class="cell-no">No</td>
+            <td class="cell-no">No</td>
+            <td class="cell-partial">Partial</td>
+            <td class="highlight cell-yes">W3C JSON-LD</td>
+          </tr>
+          <tr>
+            <td>Offline Verifiable</td>
+            <td class="cell-no">No</td>
+            <td class="cell-no">No</td>
+            <td class="cell-partial">Partial</td>
+            <td class="highlight cell-yes">Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="rule" />
+
+<!-- ── IP Portfolio ────────────────────────────────── -->
+<section class="section" id="ip">
+  <div class="section-inner">
+    <div class="section-label">Strategic IP Portfolio</div>
+    <h2 class="section-title">Licensing and Acquisition Available Under NDA</h2>
+    <p class="section-desc">
+      Full architecture, claim strategy, technical models, and licensing pathways
+      available to qualified parties under appropriate review conditions.
+      USPTO Docket 85498 · Provisional Filed January 28, 2026.
+    </p>
+    <div style="overflow-x:auto;">
+      <table class="ip-table">
+        <thead>
+          <tr>
+            <th>Technology</th>
+            <th>Operational Problem</th>
+            <th>Primary Buyer / Licensee</th>
+            <th>Layer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <span class="ip-name">CreatorGuard Core</span>
+              <span class="ip-layer">Flagship</span>
+            </td>
+            <td>Attribution continuity, provenance governance, AI training authorization</td>
+            <td>AI platforms, media companies, cloud providers, rights organizations</td>
+            <td><span class="ip-layer">Infrastructure</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="ip-name">VoiceGuard</span>
+              <span class="ip-layer">Defense</span>
+            </td>
+            <td>Voice cloning detection, synthetic call identity misuse, real-time verification</td>
+            <td>Telecom, banking, telehealth, government, call center infrastructure</td>
+            <td><span class="ip-layer">Defense</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="ip-name">Enforcement Signal Layer</span>
+              <span class="ip-layer">Defense</span>
+            </td>
+            <td>Policy-aware content distribution, automated takedown, compliance triggers</td>
+            <td>Social platforms, content marketplaces, enterprise trust and safety teams</td>
+            <td><span class="ip-layer">Defense</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="ip-name">Audit Infrastructure</span>
+              <span class="ip-layer">Infrastructure</span>
+            </td>
+            <td>Chain-of-custody records, court-admissible digital provenance, compliance audit trails</td>
+            <td>Legal and forensic professionals, compliance teams, regulated industries</td>
+            <td><span class="ip-layer">Infrastructure</span></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="ip-name">Identity Verification Layer</span>
+              <span class="ip-layer">Infrastructure</span>
+            </td>
+            <td>Enterprise identity binding, verified digital ownership, platform trust architecture</td>
+            <td>Enterprise IT, identity platforms, government, academic institutions</td>
+            <td><span class="ip-layer">Infrastructure</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:16px;font-family:var(--mono);font-size:10px;color:var(--text-dim);">
+      Full architecture, claim strategy, and licensing pathways available under NDA.
+      Contact CreatorGuard to initiate review.
+    </p>
+  </div>
+</section>
+
+<hr class="rule" />
+
+<!-- ── Access ──────────────────────────────────────── -->
+<section class="access-section" id="access">
+  <div class="access-inner">
+    <div>
+      <div class="section-label">Institutional Access</div>
+      <h2 class="section-title" style="margin-bottom:12px;">Request Access Under NDA</h2>
+      <p style="font-size:14px;color:var(--text-mid);line-height:1.7;margin-bottom:32px;max-width:420px;">
+        Licensing discussions, acquisition review, and technical documentation
+        access are available to qualified institutional parties under NDA.
+        Requests reviewed within 5 business days.
+      </p>
+      <form class="access-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">Full Name *</label>
+            <input class="form-input" type="text" name="name" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Title / Role *</label>
+            <input class="form-input" type="text" name="title" required />
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Institutional Email *</label>
+          <input class="form-input" type="email" name="email" required />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Organization *</label>
+          <input class="form-input" type="text" name="organization" required />
+        </div>
+        <div class="form-field">
+          <label class="form-label">Area of Interest *</label>
+          <select class="form-select" name="interest" required>
+            <option value="">Select</option>
+            <option>AI Training Authorization / Governance</option>
+            <option>Platform Licensing</option>
+            <option>Enterprise Verification</option>
+            <option>IP Acquisition / Partnership</option>
+            <option>Legal / Audit Infrastructure</option>
+            <option>Voice Identity Protection</option>
+            <option>Standards Body / Technical Review</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Governance Problem Statement</label>
+          <textarea class="form-textarea" name="problem" rows="3" placeholder="Describe the specific authorization or provenance problem you are addressing."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Submit Access Request</button>
+        <p class="form-note">
+          Submission represents a genuine institutional evaluation request.
+          Technical materials provided upon qualification.
+        </p>
+      </form>
+    </div>
+
+    <div class="access-info">
+      <div class="info-block">
+        <div class="info-label">Institutional Registration</div>
+        <div style="border:1px solid var(--bg-border);overflow:hidden;">
+          <div class="cred-field">
+            <span class="cred-key">SAM.gov UEI</span>
+            <span class="cred-val">QPGEMXLRHSK5</span>
+          </div>
+          <div class="cred-field">
+            <span class="cred-key">DUNS</span>
+            <span class="cred-val">14-464-9875</span>
+          </div>
+          <div class="cred-field">
+            <span class="cred-key">USPTO Docket</span>
+            <span class="cred-val">85498</span>
+          </div>
+          <div class="cred-field">
+            <span class="cred-key">Provisional Filed</span>
+            <span class="cred-val">January 28, 2026</span>
+          </div>
+          <div class="cred-field">
+            <span class="cred-key">Schema Endpoint</span>
+            <span class="cred-val" style="color:var(--blue);">creatorguard.tech/contexts/provenance/v1.json</span>
+          </div>
+        </div>
+      </div>
+      <hr class="info-divider" />
+      <div class="info-block">
+        <div class="info-label">Scope of Verification</div>
+        <p class="info-body">
+          CreatorGuard verifies declared authorization state and cryptographic
+          continuity. It does not adjudicate copyright ownership or constitute
+          a legal opinion on creator rights. Authorization states reflect
+          creator declarations at time of issuance, bound to the content
+          fingerprint recorded in the credential.
+        </p>
+      </div>
+      <hr class="info-divider" />
+      <div class="info-block">
+        <div class="info-label">Review Process</div>
+        <p class="info-body">
+          Qualified parties receive full integration documentation, live
+          credential samples, schema reference, and verification library
+          access. Technical evaluation period with direct contact for
+          integration questions.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <span class="footer-brand">CREATORGAURD</span>
+      <span class="footer-meta">
+        Patent Pending · USPTO Docket 85498 · SAM.gov UEI: QPGEMXLRHSK5 · cgp-1.0
+      </span>
+    </div>
+    <div class="footer-links">
+      <a href="#verification">Verification</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#ip">IP Portfolio</a>
+      <a href="/ip-portfolio.html">Full Portfolio</a>
+      <a href="/contexts/provenance/v1.json" target="_blank">Schema</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function showOutput(type) {
+    const btnAuth   = document.getElementById('btn-auth');
+    const btnUnauth = document.getElementById('btn-unauth');
+    const panelAuth   = document.getElementById('panel-auth');
+    const panelUnauth = document.getElementById('panel-unauth');
+
+    if (type === 'auth') {
+      panelAuth.classList.add('visible');
+      panelUnauth.classList.remove('visible');
+      btnAuth.classList.add('active-auth');
+      btnAuth.classList.remove('active-unauth');
+      btnUnauth.classList.remove('active-auth', 'active-unauth');
+    } else {
+      panelUnauth.classList.add('visible');
+      panelAuth.classList.remove('visible');
+      btnUnauth.classList.add('active-unauth');
+      btnUnauth.classList.remove('active-auth');
+      btnAuth.classList.remove('active-auth', 'active-unauth');
+    }
+  }
+</script>
+
+</body>
+</html>
